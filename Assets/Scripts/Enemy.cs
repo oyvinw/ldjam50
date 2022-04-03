@@ -16,12 +16,14 @@ public class Enemy : MonoBehaviour
     private GameController gc;
     private Vector3 currentAngle;
     private Animator animator;
+    private AudioSource audioSource;
 
     private void Start()
     {
         sprite = GetComponentInChildren<SpriteRenderer>();
         gc = FindObjectOfType<GameController>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         currentAngle = transform.eulerAngles;
     }
 
@@ -43,21 +45,26 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        var projectile = collision.gameObject.GetComponent<Projectile>();
+        if (projectile != null)
+        {
+            DoDamage(projectile.salvo.damagePrProjectile);
+        }
+    }
+
+    public void DoDamage(float damage)
+    {
         if (alive)
         {
-            var projectile = collision.gameObject.GetComponent<Projectile>();
-            if (projectile != null)
+            hp -= damage;
+
+            if (hp <= 0)
             {
-                hp -= projectile.damage;
-
-                if (hp <= 0)
-                {
-                    Die();
-                }
-
-                animator.SetTrigger("Damaged");
-                return;
+                Die();
             }
+
+            animator.SetTrigger("Damaged");
+            audioSource.Play();
         }
     }
 

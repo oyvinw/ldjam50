@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 658145193072021932}
   - component: {fileID: -1025309931006135146}
   - component: {fileID: -2316810050654372468}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: StandardPart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,10 +114,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec0e30a5cb300047a7f7371c5213a33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 0
-  damage: 1
-  speed: 30
-  fireProjectile: 0
+  isActive: 1
+  damage: 20
+  power: 60
+  explosive: 0
   deviation: 0
   sizeMultiplier: 1
   projectileMultiplier: 1

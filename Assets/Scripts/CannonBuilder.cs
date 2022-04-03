@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class CannonBuilder : MonoBehaviour, IHasChanged
 {
@@ -25,7 +26,12 @@ public class CannonBuilder : MonoBehaviour, IHasChanged
         cannonParts = new List<(CannonPart, Sprite, Color)>();
         foreach (Transform slotTransform in slots)
         {
-            GameObject cannonPart = slotTransform.GetComponent<DragAndDropSlot>().item;
+            var dragAndDropSlot = slotTransform.GetComponent<DragAndDropSlot>();
+
+            if (dragAndDropSlot == null)
+                break;
+
+            GameObject cannonPart = dragAndDropSlot.item;
             if (cannonPart)
             {
                 var image = cannonPart.GetComponent<Image>();
@@ -36,6 +42,7 @@ public class CannonBuilder : MonoBehaviour, IHasChanged
                 cannonParts.Add((emptyCannonPart, emptyCannonSprite, Color.white));
             }
         }
+
         cannon.SetCannon(cannonParts);
     }
 }

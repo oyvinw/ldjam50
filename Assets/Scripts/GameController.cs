@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour
     public void ReportDead()
     {
         liveEnemies--;
-        if (liveEnemies <= 0)
+        if (liveEnemies == 0 && waveSpawner.finishedSpawning)
         {
             WaveFinished();
         }

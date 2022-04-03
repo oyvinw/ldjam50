@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class CannonShopDisplay : MonoBehaviour
+public class CannonShopDisplay : MonoBehaviour, IHasChanged
 {
     private Canvas cannonShopCanvas;
 
@@ -22,4 +23,8 @@ public class CannonShopDisplay : MonoBehaviour
         cannonShopCanvas.enabled = false;
     }
 
+    public void HasChanged()
+    {
+        throw new System.NotImplementedException();
+    }
 }

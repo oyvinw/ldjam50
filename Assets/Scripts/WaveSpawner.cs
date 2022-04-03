@@ -8,6 +8,7 @@ public class WaveSpawner : MonoBehaviour
     public List<Transform> spawnPositions;
     public List<Enemy> enemyTypes;
     public float spawnRowInterval = 1f;
+    public bool finishedSpawning;
 
     private List<Enemy> spawnedEnemies;
 
@@ -27,6 +28,7 @@ public class WaveSpawner : MonoBehaviour
     public void SpawnWaveWithDifficulty(float difficultyNum, float density)
     {
         ClearEnemies();
+        finishedSpawning = false;
         currentDifficultyTotal = difficultyNum;
         var enemyTypesCount = enemyTypes.Count();
 
@@ -63,6 +65,7 @@ public class WaveSpawner : MonoBehaviour
             t += Time.deltaTime;
             yield return null;
         }
+        finishedSpawning = true;
     }
 
     private void ClearEnemies()

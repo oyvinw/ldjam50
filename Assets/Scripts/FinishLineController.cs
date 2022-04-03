@@ -11,13 +11,14 @@ public class FinishLineController : MonoBehaviour
         gc = GetComponentInParent<GameController>();
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         var collidingEnemy = collision.GetComponent<Enemy>();
-        if (collidingEnemy != null)
+        if (collidingEnemy != null && collidingEnemy.alive)
         {
             gc.DoDamage(collidingEnemy.damage);
             gc.ReportDead();
+            collidingEnemy.alive = false;
             collidingEnemy.Destroy();
         }
     }

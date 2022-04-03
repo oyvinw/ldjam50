@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6629689888732720335}
   - component: {fileID: 5653315128122258557}
   - component: {fileID: 6366235581397023128}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: FireSpeedPart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,10 +114,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec0e30a5cb300047a7f7371c5213a33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 0
-  damage: 1
-  speed: 5
-  fireProjectile: 1
+  isActive: 1
+  damage: 0
+  power: 120
+  explosive: 1
   deviation: 0
   sizeMultiplier: 1
   projectileMultiplier: 1

@@ -5,8 +5,11 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     private Rigidbody2D rb;
-    public float speed = 40f;
-    public float damage = 1f;
+
+    [SerializeField]
+    private GameObject explosion;
+    public Salvo salvo;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -15,7 +18,18 @@ public class Projectile : MonoBehaviour
 
     public void FireProjectile(Vector3 angle)
     {
-        rb.AddForce(new Vector2(angle.x, angle.y) * speed); 
+        rb.AddForce(new Vector2(angle.x, angle.y) * salvo.speedPrProjectile); 
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (salvo.isExplosive)
+        {
+            Instantiate(explosion, transform.position, transform.rotation);
+            var bang = explosion.GetComponent<ExplosionController>();
+            bang.ConfigureExplosion(salvo);
+
+            Destroy(gameObject);
+        }
+    }
 }

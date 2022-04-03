@@ -21,6 +21,10 @@ Cannon
 	- Enemy Slow []
 	- Synergy-stuff []
 	- Random values of the above (?) []
+	- Cooldown! []
+
+- Animation [x]
+- Line Drawer []
 
 Enemies
 - Make enemies turn slowly to straighten up [x]
@@ -30,15 +34,18 @@ Enemies
 - Add walking animation [x]
 
 Random
-- Clean up projectiles []
+- Clean up projectiles [x]
 
 Audio
-- SFX shooting []
+- SFX shooting [x]
 - SFX Buying []
 - SFX Installing part []
 - SFX Bin [x]
+- SFX Hit [x]
 - SFX Explosion []
 
+Splash screen
+- Logo and stuff
 
 ## Notes
 ### Colors:

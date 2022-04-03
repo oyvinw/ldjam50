@@ -12,11 +12,15 @@ public class CannonController : MonoBehaviour
     private List<SpriteRenderer> cannonSprites;
     private float cannonPartSpacing;
     private int cannonPartNum;
+    private Animator anim;
+    private AudioSource audioSource;
 
     private void Awake()
     {
         cannonParts = GetComponentsInChildren<CannonPart>().ToList();
         cannonSprites = new List<SpriteRenderer>();
+        anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         foreach (var cannonPart in cannonParts)
         {
             cannonSprites.Add(cannonPart.GetComponent<SpriteRenderer>());
@@ -73,7 +77,18 @@ public class CannonController : MonoBehaviour
                 salvo.salvoDeviation += cannonPart.deviation;
 
                 salvo.damagePrProjectile += cannonPart.damage / salvo.numberOfProjectiles;
-                salvo.speedPrProjectile += cannonPart.speed / salvo.numberOfProjectiles;
+                salvo.speedPrProjectile += cannonPart.power / salvo.numberOfProjectiles;
+
+                if (!salvo.isExplosive)
+                {
+                    salvo.isExplosive = (cannonPart.explosive > 0);
+                }
+                if (salvo.isExplosive)
+                {
+                    salvo.explosionDamage = salvo.damagePrProjectile / 2;
+                    salvo.explosionForce = salvo.speedPrProjectile / 2;
+                    salvo.explosionSize = salvo.sizeMultiplier / 2;
+                }
             }
         }
 
@@ -93,10 +108,12 @@ public class CannonController : MonoBehaviour
 
             var firedProjectile = Instantiate(projectile, firePos, transform.rotation);
             firedProjectile.transform.localScale = new Vector3(firedProjectile.transform.localScale.x * salvo.sizeMultiplier, firedProjectile.transform.localScale.y * salvo.sizeMultiplier, firedProjectile.transform.localScale.z);
-            firedProjectile.damage = salvo.damagePrProjectile;
-            firedProjectile.speed = salvo.speedPrProjectile;
+            firedProjectile.salvo = salvo;
 
             firedProjectile.FireProjectile(direction);
         }
+
+        anim.SetTrigger("Fire");
+        audioSource.Play();
     }
 }
