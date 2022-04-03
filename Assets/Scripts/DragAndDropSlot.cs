@@ -25,5 +25,10 @@ public class DragAndDropSlot : MonoBehaviour, IDropHandler
             DragHandler.itemBeingDragged.transform.SetParent(transform);
             ExecuteEvents.ExecuteHierarchy<IHasChanged>(gameObject, null, (x, y) => x.HasChanged());
         }
+        else
+        {
+            
+            ExecuteEvents.ExecuteHierarchy<IHasChanged>(gameObject, null, (x, y) => x.HasChanged());
+        }
     }
 }

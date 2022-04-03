@@ -10,6 +10,8 @@ public class CannonController : MonoBehaviour
 
     private List<CannonPart> cannonParts;
     private List<SpriteRenderer> cannonSprites;
+    private float cannonPartSpacing;
+    private int cannonPartNum;
 
     private void Awake()
     {
@@ -24,19 +26,26 @@ public class CannonController : MonoBehaviour
     void Update()
     {
         MouseLook();
-        Fire();
+        if (Input.GetMouseButtonDown(0))
+        {
+            Fire(CalculateProjectiles());
+        }
     }
 
-    public void SetCannon(List<(CannonPart, Sprite)> newCannonParts)
+    public void SetCannon(List<(CannonPart, Sprite, Color)> newCannonParts)
     {
-        for (int i = 0; i < cannonParts.Count; i++)
+        cannonPartNum = 0;
+        for (int i = 0; i < newCannonParts.Count; i++)
         {
             cannonParts[i] = newCannonParts[i].Item1;
-        //    var oldSprite = cannonParts[i].GetComponent<SpriteRenderer>().sprite.name;
-
             cannonSprites[i].sprite = newCannonParts[i].Item2;
+            cannonSprites[i].color = newCannonParts[i].Item3;
 
-        //   Debug.Log($"old sprite: {oldSprite}, new sprite: {cannonParts[i].GetComponent<SpriteRenderer>().sprite.name}");
+            if (cannonSprites[i].sprite != null)
+            {
+                cannonPartNum++;
+                cannonParts[i].isActive = true;
+            }
         }
     }
 
@@ -51,14 +60,42 @@ public class CannonController : MonoBehaviour
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Clamp((angle - 90), -70f, 70f)));
     }
 
-    private void Fire()
+    private Salvo CalculateProjectiles()
     {
-        if (Input.GetMouseButtonDown(0))
+        Salvo salvo = new Salvo();
+
+        foreach (var cannonPart in cannonParts)
         {
-            var firePos = cannonParts.Last().transform.position;
-            var direction = (cannonParts.Last().transform.position - cannonParts.First().transform.position).normalized;
+            if (cannonPart.isActive)
+            {
+                salvo.numberOfProjectiles *= cannonPart.projectileMultiplier;
+                salvo.sizeMultiplier *= cannonPart.sizeMultiplier;
+                salvo.salvoDeviation += cannonPart.deviation;
+
+                salvo.damagePrProjectile += cannonPart.damage / salvo.numberOfProjectiles;
+                salvo.speedPrProjectile += cannonPart.speed / salvo.numberOfProjectiles;
+            }
+        }
+
+        return salvo;
+    }
+
+    private void Fire(Salvo salvo)
+    {
+        var firePos = cannonSprites[Mathf.Clamp(cannonPartNum - 1, 0, int.MaxValue)].transform.position;
+        var direction = (cannonSprites[Mathf.Clamp(cannonPartNum - 1, 0, int.MaxValue)].transform.position - cannonSprites.First().transform.position).normalized;
+
+        for (int i = 0; i < salvo.numberOfProjectiles; i++)
+        {
+            direction.x += Random.Range(-salvo.salvoDeviation, salvo.salvoDeviation);
+            direction.y += Random.Range(-salvo.salvoDeviation, salvo.salvoDeviation);
+            direction.Normalize();
 
             var firedProjectile = Instantiate(projectile, firePos, transform.rotation);
+            firedProjectile.transform.localScale = new Vector3(firedProjectile.transform.localScale.x * salvo.sizeMultiplier, firedProjectile.transform.localScale.y * salvo.sizeMultiplier, firedProjectile.transform.localScale.z);
+            firedProjectile.damage = salvo.damagePrProjectile;
+            firedProjectile.speed = salvo.speedPrProjectile;
+
             firedProjectile.FireProjectile(direction);
         }
     }

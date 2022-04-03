@@ -107,7 +107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5520028364625630966}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 365.41144, y: 294.57733, z: -78.41976}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 135499075522993733}
@@ -129,4 +129,5 @@ MonoBehaviour:
   damage: 0
   speed: 0
   fireProjectile: 0
-  projectileMultiplier: 0
+  projectileMultiplier: 1
+  rarity: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     private Rigidbody2D rb;
-    public float force = 40f;
+    public float speed = 40f;
     public float damage = 1f;
     // Start is called before the first frame update
     void Awake()
@@ -15,7 +15,7 @@ public class Projectile : MonoBehaviour
 
     public void FireProjectile(Vector3 angle)
     {
-        rb.AddForce(new Vector2(angle.x, angle.y) * force); 
+        rb.AddForce(new Vector2(angle.x, angle.y) * speed); 
     }
 
 }

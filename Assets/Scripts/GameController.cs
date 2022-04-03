@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
-{
     /// <summary>
     /// Things this needs to do:
     /// 
@@ -16,6 +14,8 @@ public class GameController : MonoBehaviour
     /// later:
     /// - keep track of upgrades (??)
     /// </summary>
+public class GameController : MonoBehaviour
+{
 
     [SerializeField] float enemyDifficulty = 10;
     [SerializeField] float enemyDifficultyScaling = 1.2f;
@@ -30,19 +30,21 @@ public class GameController : MonoBehaviour
     private float initialDensity;
 
     private WaveSpawner waveSpawner;
-    private NextWaveButton nextWaveButton;
     private WaveNumberDisplay waveNumberDisplay;
     private HealthDisplay healthDisplay;
     private LoseDisplay loseDisplay;
+    private CannonShopDisplay cannonShopDisplay;
+    private CannonShopController cannonShop;
 
 
     void Start()
     {
         waveSpawner = FindObjectOfType<WaveSpawner>();
-        nextWaveButton = FindObjectOfType<NextWaveButton>();
         waveNumberDisplay = FindObjectOfType<WaveNumberDisplay>();
         healthDisplay = FindObjectOfType<HealthDisplay>();
         loseDisplay = FindObjectOfType<LoseDisplay>();
+        cannonShopDisplay = FindObjectOfType<CannonShopDisplay>();
+        cannonShop = FindObjectOfType<CannonShopController>();
 
         currentHealth = maxHealth;
         initialDensity = enemyDensity;
@@ -72,7 +74,8 @@ public class GameController : MonoBehaviour
     //Give upgrades and stuff here as well
     private void WaveFinished()
     {
-        nextWaveButton.DisplayNextWaveButton(); 
+        cannonShopDisplay.DisplayCannonShop();
+        cannonShop.RestockShop();
     }
 
     public void SpawnWave()

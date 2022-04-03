@@ -10,32 +10,32 @@ public class CannonBuilder : MonoBehaviour, IHasChanged
     [SerializeField] CannonPart emptyCannonPart;
     [SerializeField] Sprite emptyCannonSprite;
 
-    private List<(CannonPart, Sprite)> cannonParts;
+    private List<(CannonPart, Sprite, Color)> cannonParts;
     private CannonController cannon;
     // Start is called before the first frame update
     void Start()
     {
-        cannonParts = new List<(CannonPart, Sprite)>();
+        cannonParts = new List<(CannonPart, Sprite, Color)>();
         cannon = FindObjectOfType<CannonController>();
         HasChanged();    
     }
 
     public void HasChanged()
     {
-        cannonParts = new List<(CannonPart, Sprite)>();
+        cannonParts = new List<(CannonPart, Sprite, Color)>();
         foreach (Transform slotTransform in slots)
         {
             GameObject cannonPart = slotTransform.GetComponent<DragAndDropSlot>().item;
             if (cannonPart)
             {
-                cannonParts.Add((cannonPart.GetComponent<CannonPart>(), cannonPart.GetComponent<Image>().sprite)); 
+                var image = cannonPart.GetComponent<Image>();
+                cannonParts.Add((cannonPart.GetComponent<CannonPart>(), image.sprite, image.color)); 
             }
             else
             {
-                cannonParts.Add((emptyCannonPart, emptyCannonSprite));
+                cannonParts.Add((emptyCannonPart, emptyCannonSprite, Color.white));
             }
         }
-
         cannon.SetCannon(cannonParts);
     }
 }

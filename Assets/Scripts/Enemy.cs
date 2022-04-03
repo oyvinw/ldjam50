@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public Color deadColor;
     public int spawnCost = 1;
 
     public float hp = 1;
@@ -15,11 +14,15 @@ public class Enemy : MonoBehaviour
 
     private SpriteRenderer sprite;
     private GameController gc;
+    private Vector3 currentAngle;
+    private Animator animator;
 
     private void Start()
     {
-        sprite = GetComponent<SpriteRenderer>();
+        sprite = GetComponentInChildren<SpriteRenderer>();
         gc = FindObjectOfType<GameController>();
+        animator = GetComponent<Animator>();
+        currentAngle = transform.eulerAngles;
     }
 
     private void FixedUpdate()
@@ -27,6 +30,14 @@ public class Enemy : MonoBehaviour
         if (alive)
         {
             transform.position = new Vector2(transform.position.x, transform.position.y - movementSpeed);
+
+            currentAngle = new Vector3(
+               Mathf.LerpAngle(currentAngle.x, 0, Time.deltaTime),
+               Mathf.LerpAngle(currentAngle.y, 0, Time.deltaTime),
+               Mathf.LerpAngle(currentAngle.z, 0, Time.deltaTime)
+                );
+
+            transform.eulerAngles = currentAngle;
         }
     }
 
@@ -43,6 +54,8 @@ public class Enemy : MonoBehaviour
                 {
                     Die();
                 }
+
+                animator.SetTrigger("Damaged");
                 return;
             }
         }
@@ -51,8 +64,8 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         alive = false;
-        sprite.color = deadColor;
         gc.ReportDead();
+        animator.SetBool("IsAlive", alive);
     }
 
     public void Destroy()
