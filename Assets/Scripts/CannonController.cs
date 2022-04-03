@@ -9,10 +9,16 @@ public class CannonController : MonoBehaviour
     public Projectile projectile;
 
     private List<CannonPart> cannonParts;
+    private List<SpriteRenderer> cannonSprites;
 
-    private void Start()
+    private void Awake()
     {
         cannonParts = GetComponentsInChildren<CannonPart>().ToList();
+        cannonSprites = new List<SpriteRenderer>();
+        foreach (var cannonPart in cannonParts)
+        {
+            cannonSprites.Add(cannonPart.GetComponent<SpriteRenderer>());
+        }
     }
 
     void Update()
@@ -26,7 +32,11 @@ public class CannonController : MonoBehaviour
         for (int i = 0; i < cannonParts.Count; i++)
         {
             cannonParts[i] = newCannonParts[i].Item1;
-            cannonParts[i].GetComponent<SpriteRenderer>().sprite = newCannonParts[i].Item2;
+        //    var oldSprite = cannonParts[i].GetComponent<SpriteRenderer>().sprite.name;
+
+            cannonSprites[i].sprite = newCannonParts[i].Item2;
+
+        //   Debug.Log($"old sprite: {oldSprite}, new sprite: {cannonParts[i].GetComponent<SpriteRenderer>().sprite.name}");
         }
     }
 
