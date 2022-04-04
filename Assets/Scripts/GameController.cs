@@ -22,12 +22,15 @@ public class GameController : MonoBehaviour
     [SerializeField] float enemyDensity = 0.1f;
     [SerializeField] float enemyDensityScaling = 1.05f;
     [SerializeField] float maxHealth = 10;
+    [SerializeField] float enemySpeed = 1f;
+    [SerializeField] float enemySpeedScaling = 1.05f;
 
     private int waveNumber = 0;
     private float currentHealth;
     private int liveEnemies;
     private float initialDifficulty;
     private float initialDensity;
+    private float initialSpeed;
 
     private WaveSpawner waveSpawner;
     private WaveNumberDisplay waveNumberDisplay;
@@ -35,6 +38,7 @@ public class GameController : MonoBehaviour
     private LoseDisplay loseDisplay;
     private CannonShopDisplay cannonShopDisplay;
     private CannonShopController cannonShop;
+    private CannonController cannonController;
 
 
     void Start()
@@ -45,21 +49,16 @@ public class GameController : MonoBehaviour
         loseDisplay = FindObjectOfType<LoseDisplay>();
         cannonShopDisplay = FindObjectOfType<CannonShopDisplay>();
         cannonShop = FindObjectOfType<CannonShopController>();
+        cannonController = FindObjectOfType<CannonController>();
 
         currentHealth = maxHealth;
         initialDensity = enemyDensity;
         initialDifficulty = enemyDifficulty;
+        initialSpeed = enemySpeed;
 
         healthDisplay.SetMaxHealth(maxHealth);
         healthDisplay.DisplayHealth(currentHealth);
-    }
-
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
-            SpawnWave();
-        }
+        SpawnWave();
     }
 
     public void ReportDead()
@@ -76,16 +75,19 @@ public class GameController : MonoBehaviour
     {
         cannonShopDisplay.DisplayCannonShop();
         cannonShop.RestockShop();
+        cannonController.DisableCannon();
     }
 
     public void SpawnWave()
     {
         waveNumber++;
         waveNumberDisplay.DisplayWave(waveNumber);
-        waveSpawner.SpawnWaveWithDifficulty(enemyDifficulty, enemyDensity);
+        waveSpawner.SpawnWaveWithDifficulty(enemyDifficulty, enemyDensity, enemySpeed);
 
         enemyDifficulty *= enemyDifficultyScaling;
         enemyDensity *= enemyDensityScaling;
+        enemySpeed *= enemySpeedScaling;
+        cannonController.EnableCannon();
     }
 
     public void DoDamage(float damage)
@@ -107,6 +109,7 @@ public class GameController : MonoBehaviour
     private void EndGame()
     {
         loseDisplay.DisplayLose();
+        cannonController.DisableCannon();
     }
 
     public void RestartGame()
@@ -116,7 +119,9 @@ public class GameController : MonoBehaviour
         currentHealth = maxHealth;
         enemyDifficulty = initialDifficulty;
         enemyDensity = initialDensity;
+        enemySpeed = initialSpeed;
         healthDisplay.DisplayHealth(currentHealth);
+        cannonController.EnableCannon();
         SpawnWave();
     }
 }

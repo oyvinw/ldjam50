@@ -98,12 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 9197796345305188186, guid: 9c2974083880f784eae50d25750a5125, type: 3}
-  speed: 40
-  damage: 1
-  isExplosive: 0
-  explosionDamage: 0
-  explosionForce: 0
-  explosionArea: 0
+  velocityLowerBounds: 0.001
 --- !u!50 &4749666333819489249
 Rigidbody2D:
   serializedVersion: 4

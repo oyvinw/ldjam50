@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ExplosionCollider : MonoBehaviour
+{
+    private ExplosionController controller;
+
+    private void Awake()
+    {
+        controller = GetComponentInParent<ExplosionController>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("trigger hit");
+        var rigidbody = collision.GetComponent<Rigidbody2D>();
+        if (rigidbody != null)
+        {
+            var force = ((rigidbody.transform.position - transform.position).normalized) * controller.force;
+            rigidbody.AddForce(force);
+
+            var enemy = collision.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.DoDamage(controller.damage);
+            }
+        }
+    }
+}

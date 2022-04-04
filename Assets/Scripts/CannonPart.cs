@@ -8,6 +8,8 @@ public class CannonPart : MonoBehaviour
 {
     readonly float damagePlusLimit = 1;
     readonly float speedPlusLimit = 15;
+    readonly float deviationPlusLimit = 0.01f;
+    readonly float fireRateMinusLimit = 0.2f;
 
     public bool isActive;
     public float damage;
@@ -15,6 +17,7 @@ public class CannonPart : MonoBehaviour
     public float explosive;
     public float deviation;
     public float sizeMultiplier = 1f;
+    public float fireDelay;
 
     private string green = "<color=#aac39e>";
     private string red = "<color=#95392c>";
@@ -109,6 +112,39 @@ public class CannonPart : MonoBehaviour
                 sb.Append("+");
             }
             sb.Append("explosive");
+            sb.Append(endColorAndLine);
+        }
+
+        if (deviation > deviationPlusLimit)
+        {
+            sb.Append(red);
+            for (float i = deviation; i > deviationPlusLimit; i =- deviationPlusLimit)
+            {
+                sb.Append("+");
+            }
+            sb.Append("deviation");
+            sb.Append(endColorAndLine);
+        }
+
+        if (fireDelay > fireRateMinusLimit)
+        {
+            sb.Append(red);
+            for (float i = fireDelay; i > fireRateMinusLimit; i =- fireRateMinusLimit)
+            {
+                sb.Append("-");
+            }
+            sb.Append("fireRate");
+            sb.Append(endColorAndLine);
+        }
+
+        if (fireDelay < fireRateMinusLimit)
+        {
+            sb.Append(green);
+            for (float i = fireDelay; i < fireRateMinusLimit; i =+ fireRateMinusLimit)
+            {
+                sb.Append("+");
+            }
+            sb.Append("damage");
             sb.Append(endColorAndLine);
         }
 

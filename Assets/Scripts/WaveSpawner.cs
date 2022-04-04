@@ -25,17 +25,17 @@ public class WaveSpawner : MonoBehaviour
     }
 
     //Returns number of enemies spawned
-    public void SpawnWaveWithDifficulty(float difficultyNum, float density)
+    public void SpawnWaveWithDifficulty(float difficultyNum, float density, float speed)
     {
         ClearEnemies();
         finishedSpawning = false;
         currentDifficultyTotal = difficultyNum;
         var enemyTypesCount = enemyTypes.Count();
 
-        StartCoroutine(SpawnWaves(difficultyNum, density));
+        StartCoroutine(SpawnWaves(difficultyNum, density, speed));
     }
 
-    private IEnumerator SpawnWaves(float difficultyNum, float density)
+    private IEnumerator SpawnWaves(float difficultyNum, float density, float speed)
     {
         var enemyCount = 0;
         var enemyTypesCount = enemyTypes.Count();
@@ -53,7 +53,9 @@ public class WaveSpawner : MonoBehaviour
                     if (Random.value < density)
                     {
                         var enemyType = enemyTypes[Random.Range(0, enemyTypesCount)];
-                        spawnedEnemies.Add(Instantiate(enemyType, spawnPos.position, transform.rotation, transform));
+                        var enemy = Instantiate(enemyType, spawnPos.position, transform.rotation, transform);
+                        enemy.movementSpeed *= speed; 
+                        spawnedEnemies.Add(enemy);
                         enemyCount++;
                         currentDifficultyTotal -= enemyType.spawnCost;
                     }

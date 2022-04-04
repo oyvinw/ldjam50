@@ -120,5 +120,6 @@ MonoBehaviour:
   explosive: 0
   deviation: 0.04
   sizeMultiplier: 0.5
+  fireDelay: 0.2
   projectileMultiplier: 3
   rarity: 0.74

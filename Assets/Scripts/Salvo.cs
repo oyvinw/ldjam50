@@ -13,4 +13,5 @@ public class Salvo
     public float explosionSize = 0f;
     public float explosionDamage = 0f;
     public float explosionForce = 0f;
+    public float cooldown = 0f;
 }

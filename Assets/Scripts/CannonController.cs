@@ -14,6 +14,8 @@ public class CannonController : MonoBehaviour
     private int cannonPartNum;
     private Animator anim;
     private AudioSource audioSource;
+    private bool canFire = true;
+    private bool canMove = true;
 
     private void Awake()
     {
@@ -27,10 +29,22 @@ public class CannonController : MonoBehaviour
         }
     }
 
+    public void DisableCannon()
+    {
+        canFire = false;
+        canMove = false;
+        transform.eulerAngles = new Vector3(0,0,-70);
+    }
+    public void EnableCannon()
+    {
+        canFire = true;
+        canMove = true;
+    }
+
     void Update()
     {
         MouseLook();
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             Fire(CalculateProjectiles());
         }
@@ -55,13 +69,16 @@ public class CannonController : MonoBehaviour
 
     private void MouseLook()
     {
-        var mouse_pos = Input.mousePosition;
-        mouse_pos.z = 5.23f;
-        var cannon_pos = Camera.main.WorldToScreenPoint(transform.position);
-        mouse_pos.x = mouse_pos.x - cannon_pos.x;
-        mouse_pos.y = mouse_pos.y - cannon_pos.y;
-        var angle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Clamp((angle - 90), -70f, 70f)));
+        if (canMove)
+        {
+            var mouse_pos = Input.mousePosition;
+            mouse_pos.z = 5.23f;
+            var cannon_pos = Camera.main.WorldToScreenPoint(transform.position);
+            mouse_pos.x = mouse_pos.x - cannon_pos.x;
+            mouse_pos.y = mouse_pos.y - cannon_pos.y;
+            var angle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Clamp((angle - 90), -70f, 70f)));
+        }
     }
 
     private Salvo CalculateProjectiles()
@@ -78,6 +95,7 @@ public class CannonController : MonoBehaviour
 
                 salvo.damagePrProjectile += cannonPart.damage / salvo.numberOfProjectiles;
                 salvo.speedPrProjectile += cannonPart.power / salvo.numberOfProjectiles;
+                salvo.cooldown += cannonPart.fireDelay;
 
                 if (!salvo.isExplosive)
                 {
@@ -85,9 +103,9 @@ public class CannonController : MonoBehaviour
                 }
                 if (salvo.isExplosive)
                 {
-                    salvo.explosionDamage = salvo.damagePrProjectile / 2;
-                    salvo.explosionForce = salvo.speedPrProjectile / 2;
-                    salvo.explosionSize = salvo.sizeMultiplier / 2;
+                    salvo.explosionDamage += ((salvo.damagePrProjectile / 2) * cannonPart.explosive);
+                    salvo.explosionForce += ((salvo.speedPrProjectile / 2) * cannonPart.explosive);
+                    salvo.explosionSize += ((salvo.sizeMultiplier / 2) * cannonPart.explosive);
                 }
             }
         }
@@ -97,23 +115,39 @@ public class CannonController : MonoBehaviour
 
     private void Fire(Salvo salvo)
     {
-        var firePos = cannonSprites[Mathf.Clamp(cannonPartNum - 1, 0, int.MaxValue)].transform.position;
-        var direction = (cannonSprites[Mathf.Clamp(cannonPartNum - 1, 0, int.MaxValue)].transform.position - cannonSprites.First().transform.position).normalized;
-
-        for (int i = 0; i < salvo.numberOfProjectiles; i++)
+        if (canFire)
         {
-            direction.x += Random.Range(-salvo.salvoDeviation, salvo.salvoDeviation);
-            direction.y += Random.Range(-salvo.salvoDeviation, salvo.salvoDeviation);
-            direction.Normalize();
+            var firePos = cannonSprites[Mathf.Clamp(cannonPartNum - 1, 0, int.MaxValue)].transform.position;
+            var direction = (cannonSprites[Mathf.Clamp(cannonPartNum - 1, 0, int.MaxValue)].transform.position - cannonSprites.First().transform.position).normalized;
 
-            var firedProjectile = Instantiate(projectile, firePos, transform.rotation);
-            firedProjectile.transform.localScale = new Vector3(firedProjectile.transform.localScale.x * salvo.sizeMultiplier, firedProjectile.transform.localScale.y * salvo.sizeMultiplier, firedProjectile.transform.localScale.z);
-            firedProjectile.salvo = salvo;
+            for (int i = 0; i < salvo.numberOfProjectiles; i++)
+            {
+                direction.x += Random.Range(-salvo.salvoDeviation, salvo.salvoDeviation);
+                direction.y += Random.Range(-salvo.salvoDeviation, salvo.salvoDeviation);
+                direction.Normalize();
 
-            firedProjectile.FireProjectile(direction);
+                var firedProjectile = Instantiate(projectile, firePos, transform.rotation);
+                firedProjectile.salvo = salvo;
+
+                firedProjectile.FireProjectile(direction);
+            }
+
+            anim.SetTrigger("Fire");
+            audioSource.Play();
+            StartCoroutine(Cooldown(salvo));
+        }
+    }
+
+    private IEnumerator Cooldown(Salvo salvo)
+    {
+        canFire = false;
+        var t = 0f;
+        while (t < salvo.cooldown)
+        {
+            t += Time.deltaTime;
+            yield return null;
         }
 
-        anim.SetTrigger("Fire");
-        audioSource.Play();
+        canFire = true;
     }
 }

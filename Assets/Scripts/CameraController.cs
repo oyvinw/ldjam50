@@ -21,12 +21,14 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         var camYGoal = Mathf.Clamp(transform.position.y + (Input.GetAxis("Vertical") * cameraMoveSpeed), bottomYLimit, topYLimit);
         camGoal = new Vector3(transform.position.x, camYGoal, transform.position.z);
+        */
     }
 
     private void FixedUpdate()
     {
-        transform.position = Vector3.Lerp(transform.position, camGoal, cameraSmoothness);
+        //transform.position = Vector3.Lerp(transform.position, camGoal, cameraSmoothness);
     }
 }
