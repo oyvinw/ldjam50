@@ -17,6 +17,12 @@ public class ExplosionCollider : MonoBehaviour
         var rigidbody = collision.GetComponent<Rigidbody2D>();
         if (rigidbody != null)
         {
+            var projectile = collision.GetComponent<Projectile>();
+            if (projectile)
+            {
+                return;
+            }
+
             var force = ((rigidbody.transform.position - transform.position).normalized) * controller.force;
             rigidbody.AddForce(force);
 
@@ -25,6 +31,7 @@ public class ExplosionCollider : MonoBehaviour
             {
                 enemy.DoDamage(controller.damage);
             }
+
         }
     }
 }

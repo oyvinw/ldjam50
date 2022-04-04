@@ -17,12 +17,28 @@ public class DragAndDropSlot : MonoBehaviour, IDropHandler
         {
             if(transform.childCount > 0)
             {
-                return transform.GetChild(0).gameObject;
+                return GetComponentInChildren<CannonPart>().gameObject;
             }
 
             return null;
         }
+
+        set
+        {
+            for (int i = transform.childCount; i > 0; i--)
+            {
+                Destroy(transform.GetChild(i-1).gameObject);
+            }
+
+            if (value == null)
+            {
+                return;
+            }
+
+            Instantiate(value, transform);
+        }
     }
+
     internal string GetEmptyText()
     {
         var sb = new StringBuilder();
@@ -43,7 +59,7 @@ public class DragAndDropSlot : MonoBehaviour, IDropHandler
         {
             DragHandler.itemBeingDragged.transform.SetParent(transform);
             var cannonPart = DragHandler.itemBeingDragged.GetComponent<CannonPart>();
-            if (cannonPart != null)
+            if (cannonPart != null && description != null)
             {
                 description.text = cannonPart.GetDescription();
             }

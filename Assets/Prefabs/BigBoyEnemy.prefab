@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnCost: 10
-  hp: 5
+  hp: 8
   movementSpeed: 0.005
   damage: 4
   alive: 1

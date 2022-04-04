@@ -115,11 +115,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 1
-  damage: 20
-  power: 60
+  damage: 0
+  power: 80
   explosive: 0
   deviation: 0
   sizeMultiplier: 1
-  fireDelay: -0.2
+  fireDelay: -0.05
   projectileMultiplier: 1
   rarity: 0.5

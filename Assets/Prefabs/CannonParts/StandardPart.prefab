@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 1
-  damage: 20
+  damage: 1
   power: 60
   explosive: 0
   deviation: 0

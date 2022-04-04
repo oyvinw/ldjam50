@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class LoseDisplay : MonoBehaviour
 {
-    public TextMeshProUGUI text;
+    private TextMeshProUGUI[] texts;
     private Button restartButton;
     private Image buttonImage;
 
@@ -16,11 +16,15 @@ public class LoseDisplay : MonoBehaviour
     {
         restartButton = GetComponentInChildren<Button>();
         buttonImage = restartButton.GetComponent<Image>();
+        texts = GetComponentsInChildren<TextMeshProUGUI>();
     }
 
     public void DisplayLose()
     {
-        text.enabled = true;
+        foreach (var text in texts)
+        {
+            text.enabled = true;
+        }
         buttonImage.enabled = true;
         restartButton.enabled = true;
         StartCoroutine(FadeIn());
@@ -29,14 +33,14 @@ public class LoseDisplay : MonoBehaviour
     private IEnumerator FadeIn()
     {
         Color imageColor = buttonImage.color;
-        Color textColor = text.color;
+        Color textColor = texts[0].color;
         for (float alpha = 0f; alpha <= 1; alpha += 0.1f)
         {
             imageColor.a = alpha;
             textColor.a = alpha;
 
             buttonImage.color = imageColor;
-            text.color = textColor;
+            texts[0].color = textColor;
             yield return new WaitForSeconds(.2f);
         }
 
@@ -44,14 +48,17 @@ public class LoseDisplay : MonoBehaviour
         textColor.a = 1;
 
         buttonImage.color = imageColor;
-        text.color = textColor;
+        texts[0].color = textColor;
 
         restartButton.enabled = true;
     }
 
     public void HideDisplay()
     {
-        text.enabled = false;
+        foreach (var text in texts)
+        {
+            text.enabled = false;
+        }
         buttonImage.enabled = false;
         restartButton.enabled = false;
     }

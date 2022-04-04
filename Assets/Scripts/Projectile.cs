@@ -28,16 +28,21 @@ public class Projectile : MonoBehaviour
     {
         if (salvo.isExplosive)
         {
-            Instantiate(explosion, transform.position, transform.rotation);
-            var bang = explosion.GetComponent<ExplosionController>();
-            bang.ConfigureExplosion(salvo);
-
-            Destroy(gameObject);
+            Detonate();
         }
         else
         {
             StartCoroutine(DestroyAfterTime(3f));
         }
+    }
+
+    public void Detonate()
+    {
+        Instantiate(explosion, transform.position, transform.rotation);
+        var bang = explosion.GetComponent<ExplosionController>();
+        bang.ConfigureExplosion(salvo);
+
+        Destroy(gameObject);
     }
 
     private IEnumerator DestroyAfterTime(float time)

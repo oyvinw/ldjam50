@@ -31,6 +31,7 @@ public class GameController : MonoBehaviour
     private float initialDifficulty;
     private float initialDensity;
     private float initialSpeed;
+    private bool gameActive;
 
     private WaveSpawner waveSpawner;
     private WaveNumberDisplay waveNumberDisplay;
@@ -39,6 +40,7 @@ public class GameController : MonoBehaviour
     private CannonShopDisplay cannonShopDisplay;
     private CannonShopController cannonShop;
     private CannonController cannonController;
+    private CannonBuilder cannonBuilder;
 
 
     void Start()
@@ -50,6 +52,7 @@ public class GameController : MonoBehaviour
         cannonShopDisplay = FindObjectOfType<CannonShopDisplay>();
         cannonShop = FindObjectOfType<CannonShopController>();
         cannonController = FindObjectOfType<CannonController>();
+        cannonBuilder = FindObjectOfType<CannonBuilder>();
 
         currentHealth = maxHealth;
         initialDensity = enemyDensity;
@@ -58,6 +61,7 @@ public class GameController : MonoBehaviour
 
         healthDisplay.SetMaxHealth(maxHealth);
         healthDisplay.DisplayHealth(currentHealth);
+        gameActive = true;
         SpawnWave();
     }
 
@@ -73,9 +77,12 @@ public class GameController : MonoBehaviour
     //Give upgrades and stuff here as well
     private void WaveFinished()
     {
-        cannonShopDisplay.DisplayCannonShop();
-        cannonShop.RestockShop();
-        cannonController.DisableCannon();
+        if (currentHealth > 0)
+        {
+            cannonShopDisplay.DisplayCannonShop();
+            cannonShop.RestockShop();
+            cannonController.DisableCannon();
+        }
     }
 
     public void SpawnWave()
@@ -108,20 +115,26 @@ public class GameController : MonoBehaviour
 
     private void EndGame()
     {
-        loseDisplay.DisplayLose();
-        cannonController.DisableCannon();
+        if (gameActive)
+        {
+            loseDisplay.DisplayLose();
+            cannonController.DisableCannon();
+            gameActive = false;
+        }
     }
 
     public void RestartGame()
     {
         liveEnemies = 0;
         waveNumber = 0;
+        gameActive = true;
         currentHealth = maxHealth;
         enemyDifficulty = initialDifficulty;
         enemyDensity = initialDensity;
         enemySpeed = initialSpeed;
         healthDisplay.DisplayHealth(currentHealth);
-        cannonController.EnableCannon();
+        cannonBuilder.Reset();
         SpawnWave();
+        cannonController.EnableCannon();
     }
 }

@@ -8,8 +8,8 @@ public class CannonController : MonoBehaviour
 {
     public Projectile projectile;
 
-    private List<CannonPart> cannonParts;
-    private List<SpriteRenderer> cannonSprites;
+    private CannonPart[] cannonParts;
+    private SpriteRenderer[] cannonSprites;
     private float cannonPartSpacing;
     private int cannonPartNum;
     private Animator anim;
@@ -19,14 +19,10 @@ public class CannonController : MonoBehaviour
 
     private void Awake()
     {
-        cannonParts = GetComponentsInChildren<CannonPart>().ToList();
-        cannonSprites = new List<SpriteRenderer>();
+        cannonParts = new CannonPart[5];
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-        foreach (var cannonPart in cannonParts)
-        {
-            cannonSprites.Add(cannonPart.GetComponent<SpriteRenderer>());
-        }
+        cannonSprites = GetComponentsInChildren<SpriteRenderer>();
     }
 
     public void DisableCannon()
