@@ -49,7 +49,7 @@ public class CannonBuilder : MonoBehaviour, IHasChanged
         cannon.SetCannon(cannonParts);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (updateNextFrame)
         {

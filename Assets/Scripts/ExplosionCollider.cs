@@ -13,7 +13,6 @@ public class ExplosionCollider : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("trigger hit");
         var rigidbody = collision.GetComponent<Rigidbody2D>();
         if (rigidbody != null)
         {
