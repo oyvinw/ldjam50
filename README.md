@@ -8,7 +8,7 @@ Shop
 - Cannon-part bin [x]
 - make cannon shop have random stuff [x]
 - pick one from cannon shop a day? buy it? []
-- Have description of part-effects []
+- Have description of part-effects [x]
 - Make shop look like blueprint []
 
 Cannon
@@ -16,12 +16,12 @@ Cannon
 	- Splitter [x]
 	- Damage [x]
 	- Speed [x]
-	- Explosive []
+	- Explosive [x]
 	- Projectile Speed [x]
 	- Enemy Slow []
 	- Synergy-stuff []
 	- Random values of the above (?) []
-	- Cooldown! []
+	- Cooldown! [x]
 
 - Animation [x]
 - Line Drawer []
@@ -46,6 +46,15 @@ Audio
 
 Splash screen
 - Logo and stuff
+
+(Optional) Post Jam TODO:
+- Different waves with different strategies needed []
+- Crewman slots []
+- Crewmen with various synergy-effects []
+- New enemy-types []
+- New and more balanced cannon-parts and effects []
+- Economy system of some sort []
+- Risk reward system for not upgrading early []
 
 ## Notes
 ### Colors:
